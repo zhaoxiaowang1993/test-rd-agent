@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>北京音语科技有限公司</title>
+  <style>
+    :root {
+      --bg: #070b14;
+      --bg-soft: #0d1424;
+      --line: rgba(118, 164, 255, 0.25);
+      --text: #e8f0ff;
+      --muted: #95a8cd;
+      --accent: #39d0ff;
+      --accent-2: #4f7dff;
+      --card: rgba(15, 24, 43, 0.75);
+      --glow: 0 0 40px rgba(57, 208, 255, 0.24);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 12%, rgba(79, 125, 255, 0.28), transparent 35%),
+        radial-gradient(circle at 82% 20%, rgba(57, 208, 255, 0.22), transparent 34%),
+        linear-gradient(160deg, #05070c 0%, #091328 58%, #070b14 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+      animation: pulseGrid 8s ease-in-out infinite;
+    }
+
+    .blob {
+      position: fixed;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .blob-a {
+      background: #2e65ff;
+      top: -90px;
+      right: -100px;
+      animation: floatA 14s ease-in-out infinite;
+    }
+
+    .blob-b {
+      background: #19c0ff;
+      bottom: -120px;
+      left: -80px;
+      animation: floatB 16s ease-in-out infinite;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+      padding: 36px 0 56px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(18, 31, 56, 0.84), rgba(8, 14, 26, 0.82));
+      box-shadow: var(--glow);
+      padding: 52px 48px;
+      backdrop-filter: blur(8px);
+      transform: translateY(26px);
+      opacity: 0;
+      animation: riseIn 0.9s ease forwards;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 14px;
+      border: 1px solid rgba(57, 208, 255, 0.52);
+      border-radius: 999px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(30px, 5.6vw, 54px);
+      line-height: 1.12;
+      margin-bottom: 14px;
+    }
+
+    .slogan {
+      color: var(--muted);
+      font-size: clamp(15px, 2.3vw, 20px);
+      max-width: 720px;
+      line-height: 1.75;
+    }
+
+    .section {
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+      backdrop-filter: blur(8px);
+      padding: 30px;
+      transform: translateY(20px);
+      opacity: 0;
+      animation: riseIn 0.8s ease forwards;
+    }
+
+    .section:nth-of-type(2) { animation-delay: 0.12s; }
+    .section:nth-of-type(3) { animation-delay: 0.24s; }
+    .section:nth-of-type(4) { animation-delay: 0.36s; }
+
+    .section-title {
+      font-size: 24px;
+      margin-bottom: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    .section p {
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 16px;
+    }
+
+    .scope-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .scope-item {
+      border: 1px solid rgba(118, 164, 255, 0.32);
+      border-radius: 14px;
+      padding: 16px 14px;
+      background: linear-gradient(135deg, rgba(23, 38, 68, 0.82), rgba(10, 17, 31, 0.76));
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .scope-item:hover {
+      transform: translateY(-5px);
+      border-color: rgba(57, 208, 255, 0.9);
+      box-shadow: 0 10px 24px rgba(57, 208, 255, 0.2);
+    }
+
+    .scope-item h3 {
+      font-size: 17px;
+      margin-bottom: 8px;
+      color: #d7e7ff;
+    }
+
+    .scope-item p {
+      font-size: 14px;
+      color: #9eb2d8;
+      line-height: 1.7;
+    }
+
+    .contact-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .contact-item {
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(118, 164, 255, 0.26);
+      background: rgba(8, 14, 27, 0.52);
+      font-size: 15px;
+      color: #c8d9f8;
+      line-height: 1.8;
+    }
+
+    .contact-item strong {
+      color: #edf4ff;
+      margin-right: 8px;
+      font-weight: 600;
+    }
+
+    .footer {
+      text-align: center;
+      color: #7f93b7;
+      margin-top: 20px;
+      font-size: 13px;
+      letter-spacing: 0.03em;
+    }
+
+    @keyframes riseIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatA {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-36px, 26px); }
+    }
+
+    @keyframes floatB {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(38px, -24px); }
+    }
+
+    @keyframes pulseGrid {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.22; }
+    }
+
+    @media (max-width: 900px) {
+      .hero { padding: 38px 26px; }
+      .section { padding: 22px; }
+      .scope-grid,
+      .contact-list { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .page { width: 94vw; padding-top: 20px; }
+      .section-title { font-size: 22px; }
+      .section p { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-overlay"></div>
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+
+  <main class="page">
+    <section class="hero">
+      <span class="tag">BEIJING YINYU TECHNOLOGY</span>
+      <h1>北京音语科技有限公司</h1>
+      <p class="slogan">
+        以智能语音与数字技术为核心，聚焦企业数字化升级与创新应用落地，
+        打造更高效、更可靠、更具未来感的技术服务体验。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">公司介绍</h2>
+      <p>
+        北京音语科技有限公司是一家专注于人工智能与软件技术融合的创新型企业，
+        依托语音识别、语义理解、数据分析与云端服务能力，为政府、企业及行业客户提供从咨询规划到系统交付的一站式解决方案。
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">业务范围</h2>
+      <div class="scope-grid">
+        <article class="scope-item">
+          <h3>智能语音系统</h3>
+          <p>语音识别、语音合成、语音交互平台构建与定制开发。</p>
+        </article>
+        <article class="scope-item">
+          <h3>企业数字化方案</h3>
+          <p>业务流程数字化、数据中台搭建、管理系统集成实施。</p>
+        </article>
+        <article class="scope-item">
+          <h3>AI 应用开发</h3>
+          <p>智能客服、知识库问答、行业模型应用与场景化落地。</p>
+        </article>
+        <article class="scope-item">
+          <h3>云端技术服务</h3>
+          <p>云架构设计、运维监控、弹性扩容与高可用方案支持。</p>
+        </article>
+        <article class="scope-item">
+          <h3>软件定制开发</h3>
+          <p>Web/移动端应用开发、系统改造、接口与平台联动。</p>
+        </article>
+        <article class="scope-item">
+          <h3>技术咨询与培训</h3>
+          <p>技术评估、项目规划、团队培训与持续优化咨询。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">联系方式</h2>
+      <ul class="contact-list">
+        <li class="contact-item"><strong>公司名称</strong>北京音语科技有限公司</li>
+        <li class="contact-item"><strong>联系电话</strong>010-8888-8888</li>
+        <li class="contact-item"><strong>邮箱地址</strong>contact@yinyutech.com</li>
+        <li class="contact-item"><strong>办公地址</strong>北京市海淀区科技园区示例路 88 号</li>
+      </ul>
+    </section>
+
+    <p class="footer">© 2026 北京音语科技有限公司 版权所有</p>
+  </main>
+</body>
+</html>
